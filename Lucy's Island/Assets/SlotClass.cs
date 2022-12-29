@@ -20,8 +20,20 @@ public class SlotClass
         quantity = _quantity;
     }
 
+    public void Clear()
+    {
+        this.item = null;
+        this.quantity = 0;
+    }
+
     public ItemClass GetItem() { return item; }
     public int GetQuantity() { return quantity; }
     public void AddQuantity(int _quantity) { quantity += _quantity; }
     public void SubQuantity(int _quantity) { quantity -= _quantity; }
+    public void AddItem(ItemClass item, int quantity)
+    {
+        this.item = item;
+        this.quantity = quantity;
+    }
+
 }

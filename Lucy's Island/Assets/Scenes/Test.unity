@@ -1368,11 +1368,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotsHolder: {fileID: 289627051}
-  itemToAdd: {fileID: 11400000, guid: 9795aef0029d59b4fb009e1c9525d79b, type: 2}
-  itemToRemove: {fileID: 11400000, guid: 513c30ec0ecc65d4a94bdd7a0097cb17, type: 2}
-  items:
-  - {fileID: 11400000, guid: 513c30ec0ecc65d4a94bdd7a0097cb17, type: 2}
-  - {fileID: 11400000, guid: 1191f5a182b07bf4c8d15dcd6b07dac0, type: 2}
+  itemToAdd: {fileID: 11400000, guid: 513c30ec0ecc65d4a94bdd7a0097cb17, type: 2}
+  itemToRemove: {fileID: 11400000, guid: 9795aef0029d59b4fb009e1c9525d79b, type: 2}
+  startingItems:
+  - item: {fileID: 11400000, guid: 9795aef0029d59b4fb009e1c9525d79b, type: 2}
+    quantity: 5
 --- !u!4 &1473386213
 Transform:
   m_ObjectHideFlags: 0
