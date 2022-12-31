@@ -8,6 +8,7 @@ public class InventoryManager : MonoBehaviour
 {
     [SerializeField] GameObject itemCursor;
     [SerializeField] GameObject slotsHolder;
+    [SerializeField] GameObject hotbarSlotHolder;
     [SerializeField] ItemClass itemToAdd;
     [SerializeField] ItemClass itemToRemove;
     [SerializeField] SlotClass[] startingItems;
@@ -16,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     SlotClass[] items;
 
     GameObject[] slots;
+    GameObject[] hotbarSlots;
 
     SlotClass movingSlot;
     SlotClass tempSlot;
@@ -23,10 +25,21 @@ public class InventoryManager : MonoBehaviour
 
     bool isMovingItem;
 
+    [SerializeField] GameObject hotbarSelector;
+    [SerializeField] int selectedSlotIndex = 0;
+    public ItemClass selectedItem;
+
     void Start()
     {
         slots = new GameObject[slotsHolder.transform.childCount];
         items = new SlotClass[slots.Length];
+
+        hotbarSlots = new GameObject[hotbarSlotHolder.transform.childCount];
+
+        for (int i = 0; i < hotbarSlots.Length; i++)
+        {
+            hotbarSlots[i] = hotbarSlotHolder.transform.GetChild(i).gameObject;
+        }
 
         for (int i = 0; i < items.Length; i++)
         {
@@ -39,7 +52,7 @@ public class InventoryManager : MonoBehaviour
         }
 
 
-        Debug.Log(items.Length);
+        //Debug.Log(items.Length);
         //set all the slots
         for (int i = 0; i < slotsHolder.transform.childCount; i++)
         {
@@ -85,6 +98,17 @@ public class InventoryManager : MonoBehaviour
                 BeginItemMove_Half();
             }
         }
+
+        if(Input.GetAxis("Mouse ScrollWheel") > 0) //scrolling up
+        {
+            selectedSlotIndex = Mathf.Clamp(selectedSlotIndex + 1, 0, hotbarSlots.Length - 1);
+        }
+        else if(Input.GetAxis("Mouse ScrollWheel") < 0) // scrolling down
+        {
+            selectedSlotIndex = Mathf.Clamp(selectedSlotIndex - 1, 0, hotbarSlots.Length -1);
+        }
+        hotbarSelector.transform.position = hotbarSlots[selectedSlotIndex].transform.position;
+        selectedItem = items[selectedSlotIndex + (hotbarSlots.Length * 3)].GetItem();
     }
 
     #region Inventory Utils
@@ -92,7 +116,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            try 
+            try
             {
                 slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
                 slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i].GetItem().itemIcon;
@@ -103,11 +127,37 @@ public class InventoryManager : MonoBehaviour
                     slots[i].transform.GetChild(1).GetComponent<Text>().text = "";
                 }
             }
-            catch 
-            { 
-                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = null; 
-                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false; 
+            catch
+            {
+                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
+                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
                 slots[i].transform.GetChild(1).GetComponent<Text>().text = "";
+            }
+        }
+
+        RefreshHotbar();
+    }
+    public void RefreshHotbar()
+    {
+        for (int i = 0; i < hotbarSlots.Length; i++)
+        {
+            try
+            {
+                hotbarSlots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
+                hotbarSlots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i + (hotbarSlots.Length * 3)].GetItem().itemIcon;
+
+                if (items[i + (hotbarSlots.Length * 3)].GetItem().isStackable)
+                    hotbarSlots[i].transform.GetChild(1).GetComponent<Text>().text = items[i + (hotbarSlots.Length * 3)].GetQuantity() + "";
+                else
+                {
+                    hotbarSlots[i].transform.GetChild(1).GetComponent<Text>().text = "";
+                }
+            }
+            catch
+            {
+                hotbarSlots[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
+                hotbarSlots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
+                hotbarSlots[i].transform.GetChild(1).GetComponent<Text>().text = "";
             }
         }
     }
@@ -119,7 +169,7 @@ public class InventoryManager : MonoBehaviour
          SlotClass slot = Contains(item);
          if (slot != null && slot.GetItem().isStackable)
          {
-             slot.AddQuantity(1);
+             slot.AddQuantity(quantity);
          }
          else
          {
@@ -289,7 +339,7 @@ public class InventoryManager : MonoBehaviour
     }
     SlotClass GetClosetSlot()
     {
-        Debug.Log(Input.mousePosition);
+        //Debug.Log(Input.mousePosition);
 
         for (int i = 0; i < slots.Length; i++)
         {
