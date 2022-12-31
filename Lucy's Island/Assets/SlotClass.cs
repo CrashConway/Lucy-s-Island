@@ -20,6 +20,12 @@ public class SlotClass
         quantity = _quantity;
     }
 
+    public SlotClass(SlotClass slot)
+    {
+        item = slot.item;
+        quantity = slot.quantity;
+    }
+
     public void Clear()
     {
         this.item = null;
