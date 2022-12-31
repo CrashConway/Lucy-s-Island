@@ -261,7 +261,9 @@ public class InventoryManager : MonoBehaviour
     {
         originalSlot = (GetClosetSlot());
         if (originalSlot == null)
-            return false;  //there is not item to be moved
+            return false;  
+        if (originalSlot.GetItem() != null && originalSlot.GetItem() != movingSlot.GetItem())
+            return false;
 
         movingSlot.SubQuantity(1);
         if(originalSlot.GetItem() != null && originalSlot.GetItem() == movingSlot.GetItem())
