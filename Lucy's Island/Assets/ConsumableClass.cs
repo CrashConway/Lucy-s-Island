@@ -7,8 +7,12 @@ public class ConsumableClass : ItemClass
 {
     [Header("Consumable")]
     public float heathAdded;
-    public override ItemClass GetItem() { return this; }
-    public override ToolClass GetTool() { return null; }
-    public override MiscClass GetMisc() { return null; }
+
+    public override void Use(PlayerTestController caller)
+    {
+        base.Use(caller);
+        Debug.Log("Eats Consumable");
+        caller.inventory.UseSelected();
+    }
     public override ConsumableClass GetConsumable() { return this; }
 }

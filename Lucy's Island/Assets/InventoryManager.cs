@@ -221,6 +221,12 @@ public class InventoryManager : MonoBehaviour
         return true;
     }
 
+    public void UseSelected()
+    {
+        items[selectedSlotIndex + (hotbarSlots.Length * 3)].SubQuantity(1);
+        RefreshUI();
+    }
+
     public SlotClass Contains(ItemClass item)
      {
         for(int i = 0; i < items.Length; i++)
