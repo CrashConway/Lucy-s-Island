@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
+    [SerializeField] private List<CraftingRecipeClass> craftingRecipes = new List<CraftingRecipeClass>();
+    //Will want to load these recipies from a resources folder using: Resources.LoadAll<Crafting RecipeClass>()
+    
     [SerializeField] GameObject itemCursor;
     [SerializeField] GameObject slotsHolder;
     [SerializeField] GameObject hotbarSlotHolder;
@@ -67,6 +70,10 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.C)) //handle crafting
+            Craft(craftingRecipes[0]);
+
         itemCursor.SetActive(isMovingItem);
         itemCursor.transform.position = Input.mousePosition;
         if (isMovingItem)
@@ -109,6 +116,15 @@ public class InventoryManager : MonoBehaviour
         }
         hotbarSelector.transform.position = hotbarSlots[selectedSlotIndex].transform.position;
         selectedItem = items[selectedSlotIndex + (hotbarSlots.Length * 3)].GetItem();
+    }
+
+    private void Craft(CraftingRecipeClass recipe)
+    {
+        if (recipe.CanCraft(this))
+            recipe.Craft(this);
+        else
+            //show error
+            Debug.Log("Can't craft that item");
     }
 
     #region Inventory Utils
@@ -221,6 +237,37 @@ public class InventoryManager : MonoBehaviour
         return true;
     }
 
+    public bool Remove(ItemClass item, int quantity)
+    {
+        //items.Remove(item);
+        SlotClass temp = Contains(item);
+        if (temp != null)
+        {
+            if (temp.GetQuantity() > 1)
+                temp.SubQuantity(quantity);
+            else
+            {
+                int slotToRemoveIndex = 0;
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (items[i].GetItem() == item)
+                    {
+                        slotToRemoveIndex = i;
+                        break;
+                    }
+                }
+                items[slotToRemoveIndex].Clear();
+            }
+        }
+        else
+        {
+            return false;
+        }
+        RefreshUI();
+        return true;
+    }
+
+
     public void UseSelected()
     {
         items[selectedSlotIndex + (hotbarSlots.Length * 3)].SubQuantity(1);
@@ -238,10 +285,22 @@ public class InventoryManager : MonoBehaviour
         }
         return null;
      }
+
+    public bool Contains(ItemClass item, int quantity)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i].GetItem() == item && items[i].GetQuantity() >= quantity)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     #endregion Inventory Utils
 
     #region Moving Inventory
-    
+
     bool BeginItemMove()
     {
         originalSlot = (GetClosetSlot());
