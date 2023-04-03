@@ -2042,6 +2042,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f407b562c3fb0b54a89ecfbcfa12422d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  craftingRecipes:
+  - {fileID: 11400000, guid: 5be5c4d69a8c7ed4eaf4cf32a9f9beb4, type: 2}
   itemCursor: {fileID: 31996240}
   slotsHolder: {fileID: 289627051}
   hotbarSlotHolder: {fileID: 1143743806}
@@ -2056,6 +2058,10 @@ MonoBehaviour:
     quantity: 5
   - item: {fileID: 11400000, guid: cc6970b19603fca48a33b43e648d748d, type: 2}
     quantity: 1
+  - item: {fileID: 11400000, guid: 75a757afa7f62374f933e1bbdb100c68, type: 2}
+    quantity: 20
+  - item: {fileID: 11400000, guid: 253c8a615f929f7448521cd2d0ec4d67, type: 2}
+    quantity: 20
   hotbarSelector: {fileID: 1355170439}
   selectedSlotIndex: 0
   selectedItem: {fileID: 0}

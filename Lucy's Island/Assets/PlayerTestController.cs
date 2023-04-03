@@ -15,5 +15,6 @@ public class PlayerTestController : MonoBehaviour
             if(inventory.selectedItem != null)
                 inventory.selectedItem.Use(this);
         }
+
     }
 }
